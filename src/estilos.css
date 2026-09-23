@@ -1,0 +1,663 @@
+/* =====================================================================
+   Prancheta — identidade visual
+   Fundo osso, superfícies em creme, vinho para ação e rosa para destaque.
+   Tema único e claro: o app não acompanha o modo noturno do celular,
+   para a paleta se manter igual em todo aparelho.
+   ===================================================================== */
+
+:root {
+  /* fundos */
+  --fundo: #f5f5f0;
+  --superficie: #fff9f2;
+  --superficie-2: #f3e6d5;
+
+  /* texto */
+  --tinta: #26161a;
+  --tinta-2: #5c474b;
+  --tinta-3: #7e686c;
+
+  /* traços */
+  --borda: #e4d7c8;
+  --borda-2: #efe6da;
+
+  /* marca e ação */
+  --vinho: #800020;
+  --vinho-claro: #9e2438;
+  --vinho-tinta: #fff9f2;
+  --vinho-suave: #f2dfe1;
+
+  /* destaque e alerta */
+  --rosa: #d45060;
+  --rosa-tinta: #a83247;
+  --rosa-suave: #f8e1e4;
+
+  --raio: 16px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* nada de mídia passa da largura do bloco que a contém */
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.display {
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+.eyebrow {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+/* ---------- estrutura do app ---------- */
+.app {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100%;
+  background: var(--fundo);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+@media (min-width: 560px) {
+  .app {
+    border-inline: 1px solid var(--borda);
+  }
+}
+
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+  background: var(--fundo);
+  border-bottom: 1px solid var(--borda);
+}
+.appbar h1 {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.appbar .sub {
+  font-size: 11.5px;
+  color: var(--tinta-3);
+  margin-top: 0;
+}
+.appbar .voltar {
+  border: 1px solid var(--borda);
+  background: var(--superficie);
+  color: var(--vinho);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+.appbar .direita {
+  margin-left: auto;
+}
+
+.conteudo {
+  flex: 1;
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.conteudo > * {
+  flex: 0 0 auto;
+}
+.com-abas .conteudo {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+
+.abas {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 30;
+}
+.abas a {
+  flex: 1;
+  text-decoration: none;
+  color: var(--tinta-3);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 10px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+}
+.abas a .ic {
+  font-size: 16px;
+  line-height: 1;
+}
+.abas a.ativa {
+  color: var(--vinho);
+  border-top-color: var(--vinho);
+}
+
+/* ---------- peças ---------- */
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 13px 14px;
+}
+.cartao.plano {
+  background: var(--superficie-2);
+  border-color: transparent;
+}
+a.cartao,
+button.cartao {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+a.cartao:active,
+button.cartao:active {
+  border-color: var(--vinho);
+}
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: var(--vinho);
+  color: var(--vinho-tinta);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.avatar.brass {
+  background: var(--superficie-2);
+  color: var(--vinho);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 16px;
+}
+.nome {
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+}
+.meta {
+  font-size: 11.5px;
+  color: var(--tinta-3);
+}
+.faixa {
+  width: 3px;
+  border-radius: 3px;
+  align-self: stretch;
+  background: var(--rosa);
+  flex: 0 0 auto;
+}
+.faixa.ok {
+  background: var(--vinho);
+}
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--superficie-2);
+  color: var(--tinta-2);
+  border: 1px solid transparent;
+}
+.selo.ok {
+  background: var(--vinho);
+  color: var(--vinho-tinta);
+}
+.selo.aviso {
+  background: var(--rosa-suave);
+  color: var(--rosa-tinta);
+}
+
+.botao {
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 999px;
+  padding: 14px 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--vinho);
+  color: var(--vinho-tinta);
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+.botao:active {
+  background: var(--vinho-claro);
+}
+.botao.fantasma {
+  background: transparent;
+  border-color: var(--borda);
+  color: var(--vinho);
+}
+.botao.fantasma:active {
+  background: var(--superficie-2);
+}
+.botao.escuro {
+  background: var(--tinta);
+  color: var(--superficie);
+}
+.botao:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.botao:focus-visible,
+.campo input:focus-visible,
+.campo select:focus-visible,
+.campo textarea:focus-visible,
+.serie:focus-visible,
+.segmentos button:focus-visible {
+  outline: 2px solid var(--vinho);
+  outline-offset: 2px;
+}
+
+.campo {
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 7px 13px 9px;
+  background: var(--superficie);
+  display: block;
+}
+.campo:focus-within {
+  border-color: var(--vinho);
+}
+.campo .rotulo {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--tinta);
+  font: inherit;
+  font-size: 15px;
+  padding: 2px 0 0;
+  outline: none;
+  min-height: 24px;
+}
+.campo textarea {
+  resize: vertical;
+  min-height: 56px;
+  line-height: 1.45;
+}
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: var(--tinta-3);
+}
+
+.dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.ladrilho {
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--superficie);
+}
+.ladrilho .rot {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.ladrilho .num {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 27px;
+  line-height: 1.15;
+  color: var(--vinho);
+  font-variant-numeric: tabular-nums;
+}
+.ladrilho .num small {
+  font-family: "Archivo", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tinta-3);
+  margin-left: 3px;
+}
+
+.par {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--borda-2);
+  font-size: 14px;
+}
+.par:last-child {
+  border-bottom: 0;
+}
+.par dt {
+  color: var(--tinta-3);
+  font-size: 12.5px;
+}
+.par dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.segmentos {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-height: 36px;
+}
+.segmentos::-webkit-scrollbar {
+  display: none;
+}
+.segmentos button {
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid var(--borda);
+  background: var(--superficie);
+  color: var(--tinta-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.segmentos button[aria-pressed="true"] {
+  background: var(--vinho);
+  color: var(--vinho-tinta);
+  border-color: var(--vinho);
+}
+
+.aviso {
+  display: block;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--superficie-2);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--tinta);
+  border-left: 3px solid var(--vinho);
+}
+.aviso.erro {
+  background: var(--rosa-suave);
+  color: var(--rosa-tinta);
+  border-left-color: var(--rosa);
+  font-weight: 500;
+}
+.aviso.ok {
+  background: var(--vinho-suave);
+  color: var(--vinho);
+  border-left-color: var(--vinho);
+}
+
+.exercicio {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--borda-2);
+}
+.exercicio:last-child {
+  border-bottom: 0;
+}
+.exercicio .n {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--tinta-3);
+  padding-top: 3px;
+  width: 16px;
+  flex: 0 0 auto;
+}
+.exercicio .titulo {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.exercicio .receita {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11.5px;
+  color: var(--tinta-2);
+  margin-top: 2px;
+}
+
+.series {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.serie {
+  width: 42px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--borda);
+  display: grid;
+  place-items: center;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--tinta-2);
+  cursor: pointer;
+  background: var(--superficie);
+}
+.serie[data-feita="1"] {
+  background: var(--vinho);
+  border-color: var(--vinho);
+  color: var(--vinho-tinta);
+  font-weight: 500;
+}
+
+/* ---------- demonstração do exercício ---------- */
+.ver-midia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--vinho);
+  background: var(--superficie-2);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.ver-midia:active {
+  background: var(--vinho-suave);
+}
+.ver-midia:focus-visible {
+  outline: 2px solid var(--vinho);
+  outline-offset: 2px;
+}
+
+.midia {
+  margin-top: 10px;
+}
+.midia-caixa {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--superficie-2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.midia-caixa img,
+.midia-caixa video,
+.midia-caixa iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+  background: var(--tinta);
+}
+.midia-pe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.cronometro {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.vazio {
+  text-align: center;
+  color: var(--tinta-3);
+  font-size: 13.5px;
+  padding: 28px 10px;
+}
+
+.carregando {
+  display: grid;
+  place-items: center;
+  padding: 44px;
+  color: var(--tinta-3);
+  font-size: 13.5px;
+}
+
+.centro-tela {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 20px calc(28px + env(safe-area-inset-bottom));
+}
+
+.marca {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.marca .icone {
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+  background: var(--vinho);
+  color: var(--vinho-tinta);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 30px;
+}
+.marca .titulo {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.rodape-nota {
+  font-size: 12.5px;
+  color: var(--tinta-3);
+  text-align: center;
+}
+
+.link-texto {
+  background: none;
+  border: 0;
+  color: var(--vinho);
+  font: inherit;
+  font-size: 13.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
