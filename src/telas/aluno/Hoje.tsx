@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import { useSessao } from "../../lib/sessao";
 import type { Sessao, Treino, TreinoExercicio } from "../../lib/tipos";
 import { Carregando, Tela, Vazio } from "../../ui";
+import { useRecarregarAoVoltar } from "../../lib/recarregar";
 
 export default function Hoje() {
   const { quem } = useSessao();
@@ -15,9 +16,9 @@ export default function Hoje() {
 
   const diaHoje = new Date().getDay();
 
-  useEffect(() => {
+  async function buscar() {
     if (quem.tipo !== "aluno") return;
-    (async () => {
+    await (async () => {
       const [{ data: tr }, { data: se }, { data: pe }] = await Promise.all([
         supabase.from("treinos").select("*").eq("ativo", true).order("nome"),
         supabase
@@ -50,7 +51,14 @@ export default function Hoje() {
         setExercicios((ex as TreinoExercicio[]) ?? []);
       }
     })();
+  }
+
+  useEffect(() => {
+    buscar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quem]);
+
+  useRecarregarAoVoltar(buscar);
 
   if (quem.tipo !== "aluno") return null;
   if (treinos === null) return <Carregando />;

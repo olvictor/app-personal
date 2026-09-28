@@ -4,6 +4,7 @@ import { dataBR, idade, soDigitos, supabase } from "../../lib/supabase";
 import type { Aluno, Avaliacao, Treino } from "../../lib/tipos";
 import { Carregando, EscolherFoto, GraficoPeso, Tela, Vazio } from "../../ui";
 import { enviarFoto } from "../../lib/foto";
+import { useRecarregarAoVoltar } from "../../lib/recarregar";
 import { AcessoCriado } from "./NovoAluno";
 
 type Aba = "dados" | "medidas" | "treinos";
@@ -40,6 +41,8 @@ export default function Ficha() {
     carregar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useRecarregarAoVoltar(carregar);
 
   async function criarAcesso() {
     if (!aluno) return;

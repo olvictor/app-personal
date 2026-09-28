@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import { useSessao } from "../../lib/sessao";
 import type { Aluno } from "../../lib/tipos";
 import { Avatar, Carregando, Tela, Vazio } from "../../ui";
+import { useRecarregarAoVoltar } from "../../lib/recarregar";
 
 export default function Alunos() {
   const { quem } = useSessao();
@@ -11,14 +12,20 @@ export default function Alunos() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<"todos" | "ativos" | "pausados">("todos");
 
+  async function buscar() {
+    const { data } = await supabase.from("alunos").select("*").order("nome");
+    setAlunos((data as Aluno[]) ?? []);
+  }
+
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("alunos").select("*").order("nome");
-      setAlunos((data as Aluno[]) ?? []);
+      await buscar();
       // catálogo inicial de exercícios: roda uma vez, na primeira entrada
       await supabase.rpc("semear_exercicios");
     })();
   }, []);
+
+  useRecarregarAoVoltar(buscar);
 
   const lista = useMemo(() => {
     if (!alunos) return [];
