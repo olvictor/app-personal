@@ -97,12 +97,74 @@ export function Vazio({ children }: { children: ReactNode }) {
   return <div className="vazio">{children}</div>;
 }
 
+/** Foto redonda da pessoa. Sem foto, mostra as iniciais. */
+export function Avatar({
+  nome,
+  foto,
+  tamanho = 40,
+}: {
+  nome: string;
+  foto?: string | null;
+  tamanho?: number;
+}) {
+  return (
+    <div
+      className="avatar"
+      style={{ width: tamanho, height: tamanho, fontSize: Math.round(tamanho * 0.32) }}
+    >
+      {foto ? <img src={foto} alt={`Foto de ${nome}`} /> : iniciais(nome)}
+    </div>
+  );
+}
+
+/** Avatar que abre a câmera ou a galeria do celular ao ser tocado. */
+export function EscolherFoto({
+  nome,
+  foto,
+  enviando,
+  aoEscolher,
+  tamanho = 72,
+}: {
+  nome: string;
+  foto?: string | null;
+  enviando?: boolean;
+  aoEscolher: (arquivo: File) => void;
+  tamanho?: number;
+}) {
+  return (
+    <label className="escolher-foto">
+      <Avatar nome={nome} foto={foto} tamanho={tamanho} />
+      <span className="escolher-foto-acao">
+        {enviando ? "Enviando…" : foto ? "Trocar foto" : "Adicionar foto"}
+      </span>
+      <input
+        className="input-arquivo"
+        type="file"
+        accept="image/*"
+        disabled={enviando}
+        onChange={(e) => {
+          const arquivo = e.target.files?.[0];
+          e.target.value = ""; // permite escolher o mesmo arquivo de novo
+          if (arquivo) aoEscolher(arquivo);
+        }}
+      />
+    </label>
+  );
+}
+
 export function iniciais(nome: string): string {
   const partes = nome.trim().split(/\s+/);
   const a = partes[0]?.[0] ?? "";
   const b = partes.length > 1 ? partes[partes.length - 1][0] : "";
   return (a + b).toUpperCase();
 }
+
+/* =====================================================================
+   Demonstração do exercício — vídeo, GIF ou link
+   Nada é baixado antes do toque: na academia, a franquia de dados do
+   aluno é curta e o sinal costuma ser ruim.
+   ===================================================================== */
+
 export type TipoDeMidia = "imagem" | "video" | "youtube" | "vimeo" | "link";
 
 export function tipoDeMidia(url: string): TipoDeMidia {

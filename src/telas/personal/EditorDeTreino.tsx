@@ -5,6 +5,7 @@ import { useSessao } from "../../lib/sessao";
 import { DIAS } from "../../lib/tipos";
 import type { Aluno, Exercicio, Treino, TreinoExercicio } from "../../lib/tipos";
 import { Campo, Carregando, Erro, Midia, Tela, Vazio } from "../../ui";
+import { CADENCIAS_SUGERIDAS, acharTecnica, tecnicasPorGrupo } from "../../lib/tecnicas";
 
 export default function EditorDeTreino() {
   const { id } = useParams();
@@ -47,6 +48,18 @@ export default function EditorDeTreino() {
     })();
   }, [id]);
 
+  /**
+   * Link que vale para este exercício: o digitado na ficha e, quando ele
+   * está vazio, o que está guardado no catálogo. Campo em branco nunca
+   * apaga o vídeo — só quer dizer "usa o do catálogo".
+   */
+  function midiaDoItem(it: TreinoExercicio): string | null {
+    const daFicha = it.midia_url?.trim();
+    if (daFicha) return daFicha;
+    const doCatalogo = catalogo.find((c) => c.id === it.exercicio_id);
+    return doCatalogo?.video_url?.trim() || null;
+  }
+
   function mudaItem(indice: number, campo: keyof TreinoExercicio, valor: string | number) {
     setItens((antes) =>
       antes.map((it, i) => (i === indice ? { ...it, [campo]: valor } : it))
@@ -63,7 +76,7 @@ export default function EditorDeTreino() {
         treino_id: treino.id,
         exercicio_id: doCatalogo?.id ?? null,
         nome: doCatalogo?.nome ?? nomeLivre ?? "Exercício novo",
-        midia_url: doCatalogo?.video_url ?? null, 
+        midia_url: doCatalogo?.video_url ?? null,
         ordem: itens.length,
         series: 3,
         repeticoes: "10",
@@ -119,10 +132,14 @@ export default function EditorDeTreino() {
         descanso_seg: Number(it.descanso_seg) || 60,
         rir: it.rir,
         observacao: it.observacao,
-        midia_url: it.midia_url?.trim() || null, 
+        midia_url: midiaDoItem(it),
+        cadencia: it.cadencia?.trim() || null,
+        tecnica: it.tecnica || null,
       }))
     );
 
+    // o link também vai para o catálogo, se o exercício ainda não tinha um:
+    // assim vale para os outros alunos sem você digitar de novo
     for (const it of itens) {
       const doCatalogo = catalogo.find((c) => c.id === it.exercicio_id);
       if (it.midia_url?.trim() && doCatalogo && !doCatalogo.video_url) {
@@ -283,16 +300,54 @@ export default function EditorDeTreino() {
               />
             </Campo>
           </div>
-          
+
           <Campo rotulo="Vídeo ou GIF (link)">
             <input
-              placeholder="youtube.com/watch?v=… ou .../agachamento.gif"
+              placeholder={
+                midiaDoItem(it) && !it.midia_url?.trim()
+                  ? "usando o vídeo do catálogo"
+                  : "youtube.com/watch?v=… ou .../agachamento.gif"
+              }
               value={it.midia_url ?? ""}
               onChange={(e) => mudaItem(i, "midia_url", e.target.value)}
             />
           </Campo>
-          {it.midia_url?.trim() && <Midia url={it.midia_url} titulo={it.nome} />}    
+          {!it.midia_url?.trim() && midiaDoItem(it) && (
+            <div className="meta">
+              Em branco, vale o vídeo que já está no catálogo deste exercício.
+            </div>
+          )}
+          {midiaDoItem(it) && <Midia url={midiaDoItem(it)} titulo={it.nome} />}
 
+          <Campo rotulo="Cadência">
+            <input
+              list="cadencias"
+              placeholder="2-0-1-0 · descer em 2s, subir em 1s"
+              value={it.cadencia ?? ""}
+              onChange={(e) => mudaItem(i, "cadencia", e.target.value)}
+            />
+          </Campo>
+
+          <Campo rotulo="Técnica de execução">
+            <select
+              value={it.tecnica ?? ""}
+              onChange={(e) => mudaItem(i, "tecnica", e.target.value)}
+            >
+              <option value="">Série normal</option>
+              {tecnicasPorGrupo().map((g) => (
+                <optgroup key={g.grupo} label={g.grupo}>
+                  {g.itens.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.nome}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </Campo>
+          {acharTecnica(it.tecnica) && (
+            <div className="meta">{acharTecnica(it.tecnica)!.comoFazer}</div>
+          )}
 
           <div className="dupla" style={{ marginTop: 10 }}>
             <Campo rotulo="RIR">
@@ -367,6 +422,14 @@ export default function EditorDeTreino() {
           }}
         />
       </Campo>
+
+      <datalist id="cadencias">
+        {CADENCIAS_SUGERIDAS.map((c) => (
+          <option key={c} value={c.split(" — ")[0]}>
+            {c}
+          </option>
+        ))}
+      </datalist>
 
       <button className="botao" onClick={salvar} disabled={salvando}>
         {salvando ? "Salvando…" : "Salvar ficha"}

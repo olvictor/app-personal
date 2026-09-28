@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useSessao } from "../../lib/sessao";
-import { Campo, Erro, Tela, iniciais } from "../../ui";
+import { Campo, Erro, EscolherFoto, Tela } from "../../ui";
+import { enviarFoto } from "../../lib/foto";
 
 export default function PerfilPersonal() {
   const { quem, recarregar, sair } = useSessao();
@@ -13,6 +14,7 @@ export default function PerfilPersonal() {
   const [erro, setErro] = useState("");
   const [salvo, setSalvo] = useState(false);
   const [contagem, setContagem] = useState<{ alunos: number; ativos: number } | null>(null);
+  const [enviandoFoto, setEnviandoFoto] = useState(false);
 
   useEffect(() => {
     if (quem.tipo !== "personal") return;
@@ -45,13 +47,35 @@ export default function PerfilPersonal() {
     await recarregar();
   }
 
+  async function trocarFoto(arquivo: File) {
+    if (quem.tipo !== "personal") return;
+    setErro("");
+    setEnviandoFoto(true);
+    const resultado = await enviarFoto(arquivo, "perfil");
+    if ("erro" in resultado) {
+      setEnviandoFoto(false);
+      return setErro(resultado.erro);
+    }
+    const { error } = await supabase
+      .from("personais")
+      .update({ foto_url: resultado.url })
+      .eq("id", quem.personal.id);
+    setEnviandoFoto(false);
+    if (error) return setErro(error.message);
+    await recarregar();
+  }
+
   return (
     <Tela titulo="Meu perfil" abas="personal">
-      <div className="linha">
-        <div className="avatar" style={{ width: 50, height: 50, borderRadius: 999, fontSize: 16 }}>
-          {iniciais(nome || "Personal")}
-        </div>
-        <div>
+      <div className="linha" style={{ gap: 14 }}>
+        <EscolherFoto
+          nome={nome || "Personal"}
+          foto={quem.personal.foto_url}
+          enviando={enviandoFoto}
+          aoEscolher={trocarFoto}
+          tamanho={68}
+        />
+        <div style={{ minWidth: 0 }}>
           <div className="nome" style={{ fontSize: 17 }}>
             {nome || "Personal"}
           </div>

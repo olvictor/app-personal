@@ -6,6 +6,7 @@ export type Personal = {
   celular: string | null;
   cref: string | null;
   local: string | null;
+  foto_url: string | null;
 };
 
 export type Aluno = {
@@ -20,6 +21,7 @@ export type Aluno = {
   frequencia: string | null;
   observacoes: string | null;
   status: "ativo" | "pausado" | "inativo";
+  foto_url: string | null;
   criado_em: string;
 };
 
@@ -60,7 +62,9 @@ export type TreinoExercicio = {
   descanso_seg: number;
   rir: string | null;
   observacao: string | null;
-  midia_url: string | null; 
+  midia_url: string | null;
+  cadencia: string | null;
+  tecnica: string | null;
 };
 
 export type Exercicio = {
@@ -69,7 +73,7 @@ export type Exercicio = {
   nome: string;
   grupo: string | null;
   equipamento: string | null;
-   video_url: string | null;  
+  video_url: string | null;
 };
 
 export type Sessao = {

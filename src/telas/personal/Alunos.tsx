@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useSessao } from "../../lib/sessao";
 import type { Aluno } from "../../lib/tipos";
-import { Carregando, Tela, Vazio, iniciais } from "../../ui";
+import { Avatar, Carregando, Tela, Vazio } from "../../ui";
 
 export default function Alunos() {
   const { quem } = useSessao();
@@ -75,7 +75,7 @@ export default function Alunos() {
       {lista.map((a) => (
         <Link className="cartao" key={a.id} to={`/aluno/${a.id}`}>
           <div className="linha">
-            <div className="avatar">{iniciais(a.nome)}</div>
+            <Avatar nome={a.nome} foto={a.foto_url} />
             <div style={{ minWidth: 0, flex: 1 }}>
               <div className="nome">{a.nome}</div>
               <div className="meta">

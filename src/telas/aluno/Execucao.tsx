@@ -5,6 +5,7 @@ import { useSessao } from "../../lib/sessao";
 import { enviarPendentes, gravaOuGuarda, observarConexao } from "../../lib/fila";
 import type { Treino, TreinoExercicio } from "../../lib/tipos";
 import { Carregando, Midia, Tela, Vazio } from "../../ui";
+import { acharTecnica } from "../../lib/tecnicas";
 
 export default function Execucao() {
   const { id } = useParams();
@@ -154,10 +155,13 @@ export default function Execucao() {
                 {item.series} × {item.repeticoes}
                 {item.carga ? ` · ${item.carga}` : ""}
                 {item.rir ? ` · ${item.rir}` : ""}
+                {item.cadencia ? ` · cadência ${item.cadencia}` : ""}
               </div>
-              {item.observacao && (
-                <div className="meta" style={{ marginTop: 3 }}>
-                  {item.observacao}
+
+              {acharTecnica(item.tecnica) && (
+                <div className="tecnica">
+                  <span className="selo destaque">{acharTecnica(item.tecnica)!.nome}</span>
+                  <div className="tecnica-como">{acharTecnica(item.tecnica)!.comoFazer}</div>
                 </div>
               )}
               {item.observacao && (
@@ -166,9 +170,7 @@ export default function Execucao() {
                 </div>
               )}
 
-              <Midia url={item.midia_url} titulo={item.nome} />     {/* NOVO */}
-
-              <div className="series"></div>
+              <Midia url={item.midia_url} titulo={item.nome} />
 
               <div className="series">
                 {Array.from({ length: item.series }, (_, k) => k + 1).map((n) => {
